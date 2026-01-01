@@ -109,25 +109,96 @@ Feature engineering was guided by domain logic and fraud detection best practice
 
 ---
 
-## 7. Repository Structure
+## 7. Model Building & Evaluation (Task 2)
+
+### 7.1 Train-Test Split
+- Used **Stratified Train-Test Split** to preserve class distribution.
+- Separated features (`X`) and target (`y`) explicitly.
+
+### 7.2 Baseline Model: Logistic Regression
+- Implemented as an interpretable baseline.
+- Used `class_weight="balanced"` to handle imbalance.
+- Evaluation metrics:
+  - F1-Score
+  - AUC-PR
+  - Confusion Matrix
+
+### 7.3 Ensemble Model: Random Forest
+- Trained a **Random Forest classifier**.
+- Performed basic hyperparameter tuning:
+  - `n_estimators`
+  - `max_depth`
+- Compared performance against baseline.
+
+### 7.4 Cross-Validation
+- Applied **Stratified K-Fold (k=5)** cross-validation.
+- Reported mean and standard deviation of evaluation metrics.
+
+### 7.5 Model Selection
+- Selected the best-performing model based on:
+  - AUC-PR and F1-score
+  - Stability across folds
+  - Interpretability vs performance trade-off
+
+## 8. Model Explainability & Interpretation (Task 3)
+
+### 8.1 Built-in Feature Importance
+- Extracted feature importance from the Random Forest model.
+- Visualized top 10 most influential features.
+
+### 8.2 SHAP Analysis
+- Generated **SHAP Summary Plot** for global feature importance.
+- Generated **SHAP Force/Waterfall Plots** for:
+  - True Positive (correctly detected fraud)
+  - False Positive (legitimate transaction flagged as fraud)
+  - False Negative (missed fraud case)
+
+### 8.3 Key Fraud Drivers
+- Time since signup
+- Transaction frequency
+- Purchase value
+- Transaction timing (hour/day)
+- IP/network-based features
+
+### 8.4 Business Recommendations
+- Additional verification for transactions shortly after signup
+- Monitoring users with high transaction frequency
+- Time-based fraud risk scoring
+- Enhanced review for high-value transactions
+
+
+## 9. Repository Structure
 ```bash
 fraud-detection/
 ├── .github/
-│   └── workflows/          # CI/CD pipelines (e.g., unittests.yml)
-├── .vscode/                # Editor configurations
-├── data/                   # Raw and processed datasets
-├── notebooks/              # Jupyter notebooks for analysis
-│   ├── eda-creditcard.ipynb
-│   ├── eda-fraud-data.ipynb
-│   ├── feature-engineering.ipynb
-│   ├── modeling.ipynb
-│   └── shap-explainability.ipynb
-├── scripts/                # Modular Python scripts
-├── src/                    # Source code and helper functions
-├── tests/                  # Unit tests for the project
-├── .gitignore              # Files to be ignored by git
-├── README.md               # Project documentation
-└── requirements.txt        # Python dependencies
+│   └── workflows/
+│       └── ci.yml
+├── data/
+│   ├── raw/
+│   │   ├── Fraud_Data.csv
+│   │   └── creditcard.csv
+│   └── processed/
+│       └── processed_fraud_data.csv
+├── models/
+│   ├── logistic_model.pkl
+│   └── random_forest_model.pkl
+├── notebooks/
+│   ├── 01_eda_fraud_data.ipynb
+│   ├── 02_feature_engineering.ipynb
+│   ├── 03_modeling_task2.ipynb
+│   └── 04_shap_explainability_task3.ipynb
+├── src/
+│   ├── data_preprocessing.py
+│   ├── feature_engineering.py
+│   ├── baseline_logistic.py
+│   ├── train_random_forest.py
+│   ├── evaluate.py
+│   └── explainability.py
+├── tests/
+│   └── test_pipeline.py
+├── .gitignore
+├── README.md
+└── requirements.txt
 ```
 
 ## Getting Started
@@ -143,4 +214,9 @@ fraud-detection/
    source .venv/Scripts/activate  # For Git Bash
    pip install -r requirements.txt
     ```
+3. Run notebooks or scripts
+  - Start with EDA notebooks
+  - Proceed to modeling and SHAP explainability
 
+# Fraud Detection Project
+**Author:** Kalkidan Abreham
